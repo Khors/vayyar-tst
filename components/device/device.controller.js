@@ -9,10 +9,8 @@ export async function findAll(req, res) {
 }
 
 export async function addRSSI(req, res) {
-    // console.log('addRSSI', req.body)
-    const deviceModel = getDeviceModel(req.body.deiceId)
+    const deviceModel = await getDeviceModel(req.body.deviceId)
     const device = await createRSSI(deviceModel, req.body);
-    console.log(device)
     res.status(201).json(device);
 }
 

@@ -11,7 +11,6 @@ const DEVICE_STATUSES = {
 
 
 const deviceWatcher = async (deviceId) => {
-    console.log(deviceId)
     const Model = await getDeviceModel(deviceId)
 
     const tracker = Model.watch()
@@ -21,7 +20,7 @@ const deviceWatcher = async (deviceId) => {
         if (change.operationType !== 'insert') return
 
         const deviceState = await checkDeviceState(Model)
-
+        console.log(deviceState, deviceId)
         if (deviceState.status == DEVICE_STATUSES.OFFLINE) {
             sendWarningMessage(deviceId, deviceState.rssi, deviceState.status)
         }
@@ -39,7 +38,8 @@ const deviceWatcher = async (deviceId) => {
 
 async function checkDeviceState(Model) {
     const last10rssi = await getLast10(Model)
-    const sumValues = last10rssi.reduce((partialSum, item) => partialSum + item.rssi)
+    const sumValues = last10rssi.reduce((partialSum, item) => partialSum + item.rssi, 0)
+    console.log('sumValues', sumValues)
     if (sumValues / 10 <= -90) return {
         rssi: sumValues / 10,
         status: DEVICE_STATUSES.OFFLINE

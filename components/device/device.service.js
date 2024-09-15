@@ -1,9 +1,7 @@
 
 export const createRSSI = async (deviceModel, rssiData) => {
-    console.log('deviceModel', deviceModel)
     const device = new deviceModel(rssiData)
     const newRSSI = await device.save(rssiData)
-    console.log(newRSSI)
     return newRSSI
 }
 
